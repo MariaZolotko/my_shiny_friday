@@ -40,10 +40,11 @@ def cmd_info(message):
 @bot.message_handler(commands=["start"])
 def cmd_start(message):
     dbworker.set_state(message.chat.id,config.States.S_START.value)
+    hide_keyboard = types.ReplyKeyboardRemove()
     bot.send_message(message.chat.id, "Привет! Я - робопятница 🍷 \n"
                                       "Для подбора питейного заведения нужно поделиться со мной геоданными: /geo.\n"
                                       "Все возможные команды найдешь в /commands.\n"
-                                      "Скинуть состояние и начать сначала /reset.")
+                                      "Скинуть состояние и начать сначала /reset.", reply_markup=hide_keyboard)
 
 
 @bot.message_handler(commands=["commands"])
@@ -60,9 +61,10 @@ def cmd_commands(message):
 @bot.message_handler(commands=["geo"])
 def geo(message):
     dbworker.set_state(message.chat.id, config.States.S_ENTER_GEO.value)
-    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True,one_time_keyboard=True)
     button_geo = types.KeyboardButton(text="Поделиться геоданными", request_location=True)
     keyboard.add(button_geo)
+
     bot.send_message(message.chat.id, "Нажми на кнопку и передай мне свое местоположение", reply_markup=keyboard)
 
 
